@@ -11,12 +11,12 @@
 
     <!-- Top bar background -->
     <TextView
-        android:id="@+id/tvHomePage"
+        android:id="@+id/tvDevicesPage"
         android:layout_width="0dp"
         android:layout_height="88dp"
         android:background="#673AB7"
         android:gravity="center"
-        android:text="Home"
+        android:text="Devices"
         android:textColor="#FFFFFF"
         android:textSize="26sp"
         android:textStyle="bold"
@@ -75,6 +75,14 @@
             android:padding="12dp">
 
             <Button
+                android:id="@+id/menuHome"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:backgroundTint="#673AB7"
+                android:textColor="#FFFFFF"/>
+
+            <Button
                 android:id="@+id/menuProfile"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
@@ -91,30 +99,8 @@
                 android:backgroundTint="#673AB7"
                 android:textColor="#FFFFFF"
                 android:layout_marginTop="8dp"/>
-
-            <Button
-                android:id="@+id/menuHelp"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:text="Help"
-                android:backgroundTint="#673AB7"
-                android:textColor="#FFFFFF"
-                android:layout_marginTop="8dp"/>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
-
-    <!-- Pinned device -->
-    <TextView
-        android:id="@+id/tvPinnedDevice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="120dp"
-        android:text="@string/underlined_text"
-        android:textColor="#333333"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Bottom nav -->
     <LinearLayout

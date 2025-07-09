@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">AI Security Camera</string>
-    <string name="underlined_text"><u>Pinned Devices</u></string>
+    <string name="underlined_text"><u>Pinned Device</u></string>
 </resources>
