@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AISecurityCamera">
         <activity
+            android:name=".HistoryPageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AlertsPageActivity"
+            android:exported="false" />
+        <activity
             android:name=".DevicesPageActivity"
             android:exported="false" />
         <activity

@@ -11,12 +11,12 @@
 
     <!-- Top bar background -->
     <TextView
-        android:id="@+id/tvHomePage"
+        android:id="@+id/tvAlertsPage"
         android:layout_width="0dp"
         android:layout_height="88dp"
         android:background="#673AB7"
         android:gravity="center"
-        android:text="Home"
+        android:text="Alerts"
         android:textColor="#FFFFFF"
         android:textSize="26sp"
         android:textStyle="bold"
@@ -104,12 +104,12 @@
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
-        android:id="@+id/tvPinnedDevice"
+        android:id="@+id/tvTodaysActivity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="120dp"
-        android:text="@string/underlined_pinned_devices"
+        android:text="@string/underlined_today_activity"
         android:textColor="#333333"
         android:textSize="28sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -123,7 +123,6 @@
         android:background="#673AB7"
         android:paddingHorizontal="8dp"
         android:gravity="center"
-        android:windowTranslucentNavigation="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -133,9 +132,9 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:backgroundTint="#FFFFFF"
+            android:backgroundTint="#7E57C2"
             android:text="Home"
-            android:textColor="#7E57C2"
+            android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:singleLine="true"
             android:ellipsize="end"
@@ -159,9 +158,9 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:backgroundTint="#7E57C2"
+            android:backgroundTint="#FFFFFF"
             android:text="Alerts"
-            android:textColor="#FFFFFF"
+            android:textColor="#7E57C2"
             android:textSize="14sp"
             android:singleLine="true"
             android:ellipsize="end"
