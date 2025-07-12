@@ -5,6 +5,7 @@ import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -12,6 +13,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.setPadding
 import com.owenoneil.aisecuritycamera.R
 
 
@@ -20,8 +22,12 @@ class DevicesPageActivity : AppCompatActivity() {
 
     private lateinit var btnHamburger: ImageButton
     private lateinit var customMenu: View
-
-    // Add buttons from bottom nav
+    private lateinit var btnAddDevice: Button
+    private lateinit var AddDeviceMenu: View
+    private lateinit var etDeviceName: EditText
+    private lateinit var etDeviceCode: EditText
+    private lateinit var btnDone: Button
+    private lateinit var deviceContainer: LinearLayout
     private lateinit var btnHome: Button
     private lateinit var btnDevices: Button
     private lateinit var btnAlerts: Button
@@ -42,11 +48,16 @@ class DevicesPageActivity : AppCompatActivity() {
         // Find views
         btnHamburger = findViewById(R.id.btnHamburger)
         customMenu = findViewById(R.id.customMenu)
-
+        btnAddDevice = findViewById(R.id.btnAddDevice)
+        AddDeviceMenu = findViewById(R.id.AddDeviceMenu)
         btnHome = findViewById(R.id.btnHome)
         btnDevices = findViewById(R.id.btnDevices)
         btnAlerts = findViewById(R.id.btnAlerts)
         btnHistory = findViewById(R.id.btnHistory)
+        etDeviceName = findViewById(R.id.etDeviceName)
+        etDeviceCode = findViewById(R.id.etDeviceCode)
+        btnDone = findViewById(R.id.btnDone)
+        deviceContainer = findViewById(R.id.deviceContainer)
 
         // Toggle dropdown menu visibility on hamburger click
         btnHamburger.setOnClickListener {
@@ -56,6 +67,33 @@ class DevicesPageActivity : AppCompatActivity() {
                 customMenu.visibility = View.GONE
             }
         }
+        btnAddDevice.setOnClickListener{
+            if (AddDeviceMenu.visibility == View.GONE){
+                AddDeviceMenu.visibility = View.VISIBLE
+            }
+            else{
+                AddDeviceMenu.visibility = View.GONE
+            }
+        }
+
+        btnDone.setOnClickListener{
+            val deviceName = etDeviceName.text.toString()
+            if (deviceName.isNotEmpty()){
+                val newButton = Button(this)
+                newButton.text = deviceName
+                newButton.setBackgroundColor(android.graphics.Color.parseColor("#FFFFFF"))
+                newButton.setTextColor(android.graphics.Color.parseColor("#67AB7"))
+                newButton.textSize = 16f
+                newButton.setPadding(20,20,20,20)
+                newButton.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_camera,0)
+                newButton.compoundDrawablePadding = 16
+                deviceContainer.addView(newButton)
+                AddDeviceMenu.visibility = View.GONE
+                etDeviceName.text.clear()
+                etDeviceCode.text.clear()
+            }
+        }
+
         btnHome.setOnClickListener{
             val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)

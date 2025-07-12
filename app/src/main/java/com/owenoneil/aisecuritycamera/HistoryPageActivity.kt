@@ -41,7 +41,7 @@ class HistoryPageActivity : AppCompatActivity() {
         }
 
         // Find views
-        btnHamburger = findViewById(R.id.btnHamburger)
+        btnHamburger = findViewById(R .id.btnHamburger)
         customMenu = findViewById(R.id.customMenu)
 
         btnHome = findViewById(R.id.btnHome)
