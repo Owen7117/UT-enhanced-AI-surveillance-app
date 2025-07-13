@@ -82,6 +82,41 @@
                 android:backgroundTint="#673AB7"
                 android:textColor="#FFFFFF"
                 android:layout_marginTop="8dp"/>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/profileDropdown"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="4dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="12dp">
+
+                <LinearLayout
+                    android:layout_width="191dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <Button
+                        android:id="@+id/btnlogin"
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:backgroundTint="#673AB7"
+                        android:text="Login"
+                        android:textColor="#FFFFFF" />
+
+                    <Button
+                        android:id="@+id/btnlogout"
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:backgroundTint="#673AB7"
+                        android:text="Logout"
+                        android:textColor="#FFFFFF" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
             <Button
                 android:id="@+id/menuSettings"

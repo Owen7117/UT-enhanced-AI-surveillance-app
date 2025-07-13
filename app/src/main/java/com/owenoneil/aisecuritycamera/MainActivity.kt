@@ -25,6 +25,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnDevices: Button
     private lateinit var btnAlerts: Button
     private lateinit var btnHistory: Button
+    private lateinit var profileDropdown: View
+    private lateinit var btnlogin: Button
+    private lateinit var btnlogout: Button
+    private lateinit var menuProfile: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +45,14 @@ class MainActivity : AppCompatActivity() {
         // Find views
         btnHamburger = findViewById(R.id.btnHamburger)
         customMenu = findViewById(R.id.customMenu)
-
+        profileDropdown = findViewById(R.id.profileDropdown)
         btnHome = findViewById(R.id.btnHome)
         btnDevices = findViewById(R.id.btnDevices)
         btnAlerts = findViewById(R.id.btnAlerts)
         btnHistory = findViewById(R.id.btnHistory)
+        btnlogin = findViewById(R.id.btnlogin)
+        btnlogout = findViewById(R.id.btnlogout)
+        menuProfile = findViewById(R.id.menuProfile)
 
         // Toggle dropdown menu visibility on hamburger click
         btnHamburger.setOnClickListener {
@@ -55,6 +62,14 @@ class MainActivity : AppCompatActivity() {
                 customMenu.visibility = View.GONE
             }
         }
+        menuProfile.setOnClickListener{
+            if (profileDropdown.visibility == View.GONE){
+                profileDropdown.visibility = View.VISIBLE
+            } else{
+                profileDropdown.visibility = View.GONE
+            }
+        }
+
         btnDevices.setOnClickListener{
             val intent = Intent(this,DevicesPageActivity::class.java)
             startActivity(intent)
