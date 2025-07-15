@@ -70,6 +70,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        btnlogin.setOnClickListener{
+            val intent = Intent(this,LoginPageActivity::class.java)
+            startActivity(intent)
+        }
         btnDevices.setOnClickListener{
             val intent = Intent(this,DevicesPageActivity::class.java)
             startActivity(intent)

@@ -108,7 +108,10 @@ class DevicesPageActivity : AppCompatActivity() {
                 etDeviceCode.text.clear()
             }
         }
-
+        btnlogin.setOnClickListener{
+            val intent = Intent(this,LoginPageActivity::class.java)
+            startActivity(intent)
+        }
         btnHome.setOnClickListener{
             val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)

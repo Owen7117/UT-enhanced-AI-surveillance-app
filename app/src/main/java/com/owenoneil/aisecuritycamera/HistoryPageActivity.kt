@@ -71,6 +71,10 @@ class HistoryPageActivity : AppCompatActivity() {
                 profileDropdown.visibility = View.GONE
             }
         }
+        btnlogin.setOnClickListener{
+            val intent = Intent(this,LoginPageActivity::class.java)
+            startActivity(intent)
+        }
         btnHome.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
