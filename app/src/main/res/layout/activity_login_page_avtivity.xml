@@ -55,12 +55,12 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/etUsername"
+                android:id="@+id/etEmailLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/edittext_background"
-                android:hint="Username"
+                android:hint="Email"
                 android:padding="12dp"/>
 
             <EditText
@@ -74,7 +74,7 @@
                 android:padding="12dp"/>
 
             <CheckBox
-                android:id="@+id/cbShowPassword"
+                android:id="@+id/cbShowPasswordLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -103,7 +103,7 @@
     </androidx.cardview.widget.CardView>
 
     <ImageView
-        android:id="@+id/ivLogo"
+        android:id="@+id/ivProfilePicLogin"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@drawable/ic_profile_empty"
