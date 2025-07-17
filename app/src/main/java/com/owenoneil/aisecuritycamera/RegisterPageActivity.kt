@@ -13,11 +13,12 @@ import androidx.core.view.WindowInsetsCompat
 
 
 class RegisterPageActivity : AppCompatActivity() {
-    private lateinit var btnClose: ImageButton
+    private lateinit var btnCloseRegister: ImageButton
     private lateinit var btnLoginLink: Button
-    private lateinit var etPassword: EditText
+    private lateinit var etPasswordRegister: EditText
     private lateinit var cbShowPasswordRegister: CheckBox
     private lateinit var btnRegister: Button
+    private lateinit var etConfirmPassword: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,25 +29,29 @@ class RegisterPageActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        btnClose = findViewById(R.id.btnClose)
+        btnCloseRegister = findViewById(R.id.btnCloseRegister)
         btnRegister = findViewById(R.id.btnRegister)
-        etPassword = findViewById(R.id.etPassword)
+        etPasswordRegister = findViewById(R.id.etPasswordRegister)
         cbShowPasswordRegister = findViewById(R.id.cbShowPasswordRegister)
         btnLoginLink = findViewById(R.id.btnLoginLink)
+        etConfirmPassword = findViewById(R.id.etConfirmPassword)
 
-        btnClose.setOnClickListener {
+        btnCloseRegister.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 
         cbShowPasswordRegister.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                etPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                etPasswordRegister.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                etConfirmPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
             } else {
-                etPassword.inputType =
+                etPasswordRegister.inputType =
+                    InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                etConfirmPassword.inputType =
                     InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             }
-            etPassword.setSelection(etPassword.text.length)
+            etPasswordRegister.setSelection(etPasswordRegister.text.length)
         }
 
         btnLoginLink.setOnClickListener {

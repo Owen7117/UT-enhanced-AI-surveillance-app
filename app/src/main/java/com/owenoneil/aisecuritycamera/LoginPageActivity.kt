@@ -14,10 +14,11 @@ import androidx.core.view.WindowInsetsCompat
 
 class LoginPageActivity : AppCompatActivity() {
 
-    private lateinit var btnClose: ImageButton
+    private lateinit var btnCloseLogin: ImageButton
     private lateinit var btnloginpagelogin: Button
-    private lateinit var etPassword: EditText
+    private lateinit var etPasswordLogin: EditText
     private lateinit var cbShowPasswordLogin: CheckBox
+    private lateinit var btnRegisterLink: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,22 +29,27 @@ class LoginPageActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        btnClose = findViewById(R.id.btnClose)
+        btnCloseLogin = findViewById(R.id.btnCloseLogin)
         btnloginpagelogin = findViewById(R.id.btnloginpagelogin)
-        etPassword = findViewById(R.id.etPassword)
+        etPasswordLogin = findViewById(R.id.etPasswordLogin)
         cbShowPasswordLogin = findViewById(R.id.cbShowPasswordLogin)
+        btnRegisterLink = findViewById(R.id.btnRegisterLink)
 
-        btnClose.setOnClickListener {
+        btnCloseLogin.setOnClickListener {
             val intent = Intent(this,MainActivity::class.java)
+            startActivity(intent)
+        }
+        btnRegisterLink.setOnClickListener{
+            val intent = Intent(this,RegisterPageActivity::class.java)
             startActivity(intent)
         }
         cbShowPasswordLogin.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked){
-                etPassword.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                etPasswordLogin.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
             } else{
-                etPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                etPasswordLogin.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             }
-            etPassword.setSelection(etPassword.text.length)
+            etPasswordLogin.setSelection(etPasswordLogin.text.length)
         }
     }
 }

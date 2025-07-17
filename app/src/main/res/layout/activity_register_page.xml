@@ -9,7 +9,7 @@
 
     <!-- Close Button -->
     <ImageButton
-        android:id="@+id/btnClose"
+        android:id="@+id/btnCloseRegister"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="4dp"
