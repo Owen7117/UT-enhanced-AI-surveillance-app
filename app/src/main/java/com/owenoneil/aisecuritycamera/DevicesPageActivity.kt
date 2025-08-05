@@ -9,14 +9,18 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.setPadding
+import androidx.room.Room
 import com.owenoneil.aisecuritycamera.R
-
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DevicesPageActivity : AppCompatActivity() {
 
@@ -37,6 +41,9 @@ class DevicesPageActivity : AppCompatActivity() {
     private lateinit var btnlogout: Button
     private lateinit var menuProfile: Button
 
+    private lateinit var database: DevicesDatabase
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -49,20 +56,32 @@ class DevicesPageActivity : AppCompatActivity() {
             insets
         }
 
+        database = DevicesDatabase.getInstance(this)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val savedDevices = database.dao.getAllDevices()
+            withContext(Dispatchers.Main) {
+                for (device in savedDevices) {
+                    addDeviceButton(device.devicename)
+                }
+            }
+        }
+
+
         // Find views
         btnHamburger = findViewById(R.id.btnHamburger)
         customMenu = findViewById(R.id.customMenu)
         btnAddDevice = findViewById(R.id.btnAddDevice)
         AddDeviceMenu = findViewById(R.id.AddDeviceMenu)
-        profileDropdown = findViewById(R.id.profileDropdown)
-        btnHome = findViewById(R.id.btnHome)
-        btnDevices = findViewById(R.id.btnDevices)
-        btnAlerts = findViewById(R.id.btnAlerts)
-        btnHistory = findViewById(R.id.btnHistory)
         etDeviceName = findViewById(R.id.etDeviceName)
         etDeviceCode = findViewById(R.id.etDeviceCode)
         btnDone = findViewById(R.id.btnDone)
         deviceContainer = findViewById(R.id.deviceContainer)
+        btnHome = findViewById(R.id.btnHome)
+        btnDevices = findViewById(R.id.btnDevices)
+        btnAlerts = findViewById(R.id.btnAlerts)
+        btnHistory = findViewById(R.id.btnHistory)
+        profileDropdown = findViewById(R.id.profileDropdown)
         btnlogin = findViewById(R.id.btnlogin)
         btnlogout = findViewById(R.id.btnlogout)
         menuProfile = findViewById(R.id.menuProfile)
@@ -91,42 +110,70 @@ class DevicesPageActivity : AppCompatActivity() {
             }
         }
 
-        btnDone.setOnClickListener{
-            val deviceName = etDeviceName.text.toString()
-            if (deviceName.isNotEmpty()){
-                val newButton = Button(this)
-                newButton.text = deviceName
-                newButton.setBackgroundColor(android.graphics.Color.parseColor("#FFFFFF"))
-                newButton.setTextColor(android.graphics.Color.parseColor("#67AB7"))
-                newButton.textSize = 16f
-                newButton.setPadding(20,20,20,20)
-                newButton.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_camera,0)
-                newButton.compoundDrawablePadding = 16
-                deviceContainer.addView(newButton)
-                AddDeviceMenu.visibility = View.GONE
-                etDeviceName.text.clear()
-                etDeviceCode.text.clear()
+        btnDone.setOnClickListener {
+            val name = etDeviceName.text.toString()
+            val idText = etDeviceCode.text.toString()
+
+            if (name.isNotEmpty() && idText.isNotEmpty()) {
+                val id = idText.toIntOrNull()
+                if (id == null) {
+                    Toast.makeText(this, "Device ID must be a number", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                val device = AddDevice(deviceid = id, devicename = name)
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        database.dao.insertDevice(device)
+                        runOnUiThread {
+                            addDeviceButton(name)
+                            AddDeviceMenu.visibility = View.GONE
+                            etDeviceName.text.clear()
+                            etDeviceCode.text.clear()
+                        }
+                    } catch (e: Exception) {
+                        runOnUiThread {
+                            Toast.makeText(this@DevicesPageActivity, "Device ID already exists!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            } else {
+                Toast.makeText(this, "Please enter both name and ID", Toast.LENGTH_SHORT).show()
             }
         }
-        btnlogin.setOnClickListener{
-            val intent = Intent(this,LoginPageActivity::class.java)
-            startActivity(intent)
+
+        // Navigation buttons
+        btnlogin.setOnClickListener {
+            startActivity(Intent(this, LoginPageActivity::class.java))
         }
-        btnHome.setOnClickListener{
-            val intent = Intent(this,MainActivity::class.java)
-            startActivity(intent)
+        btnHome.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
         }
         btnAlerts.setOnClickListener {
-            val intent = Intent(this, AlertsPageActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, AlertsPageActivity::class.java))
         }
         btnHistory.setOnClickListener {
-            val intent = Intent(this, HistoryPageActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, HistoryPageActivity::class.java))
         }
+
+        // Underline "Cameras" title
         val textView = findViewById<TextView>(R.id.tvCameras)
         val content = SpannableString("Cameras")
         content.setSpan(UnderlineSpan(), 0, content.length, 0)
         textView.text = content
+    }
+
+    private fun addDeviceButton(name: String) {
+        val newButton = Button(this).apply {
+            text = name
+            setBackgroundColor(android.graphics.Color.parseColor("#FFFFFF"))
+            setTextColor(android.graphics.Color.parseColor("#67AB7"))
+            textSize = 16f
+            setPadding(20, 20, 20, 20)
+            setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_camera, 0)
+            compoundDrawablePadding = 16
+        }
+        deviceContainer.addView(newButton)
     }
 }

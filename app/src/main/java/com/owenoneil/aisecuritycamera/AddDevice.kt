@@ -5,8 +5,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "devices")
 data class AddDevice(
+    @PrimaryKey val deviceid: Int,
     val devicename: String,
-    val deviceid: Int,
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0
 )
