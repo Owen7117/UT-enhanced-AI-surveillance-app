@@ -59,14 +59,13 @@ class DevicesPageActivity : AppCompatActivity() {
         database = DevicesDatabase.getInstance(this)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val savedDevices = database.dao.getAllDevices()
+            val savedDevices = database.dao().getAllDevices()
             withContext(Dispatchers.Main) {
                 for (device in savedDevices) {
                     addDeviceButton(device.devicename)
                 }
             }
         }
-
 
         // Find views
         btnHamburger = findViewById(R.id.btnHamburger)
@@ -124,16 +123,18 @@ class DevicesPageActivity : AppCompatActivity() {
                 val device = AddDevice(deviceid = id, devicename = name)
 
                 CoroutineScope(Dispatchers.IO).launch {
-                    try {
-                        database.dao.insertDevice(device)
-                        runOnUiThread {
+                    val existing = database.dao().getDeviceById(id) // <- this line prevents crashing
+
+                    if (existing == null) {
+                        database.dao().insertDevice(device)
+                        withContext(Dispatchers.Main) {
                             addDeviceButton(name)
                             AddDeviceMenu.visibility = View.GONE
                             etDeviceName.text.clear()
                             etDeviceCode.text.clear()
                         }
-                    } catch (e: Exception) {
-                        runOnUiThread {
+                    } else {
+                        withContext(Dispatchers.Main) {
                             Toast.makeText(this@DevicesPageActivity, "Device ID already exists!", Toast.LENGTH_SHORT).show()
                         }
                     }
