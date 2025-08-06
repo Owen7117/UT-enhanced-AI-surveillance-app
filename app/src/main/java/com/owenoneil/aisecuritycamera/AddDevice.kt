@@ -6,5 +6,5 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "devices")
 data class AddDevice(
     @PrimaryKey val deviceid: Int,
-    val devicename: String,
+    val devicename: String
 )

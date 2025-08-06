@@ -10,7 +10,7 @@ import androidx.room.RoomDatabase
 )
 abstract class DevicesDatabase: RoomDatabase() {
 
-    abstract val dao: Any
+    abstract val dao: AddDeviceDao
 
 
     companion object {
