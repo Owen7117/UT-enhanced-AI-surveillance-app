@@ -18,6 +18,9 @@ interface AddDeviceDao {
     @Query("SELECT * FROM devices")
     suspend fun getAllDevices(): List<AddDevice>
 
+    @Query("DELETE FROM devices WHERE devicename = :name")
+    fun deleteDeviceByName(name: String)
+
     @Query("SELECT * FROM devices WHERE deviceid = :id")
     suspend fun getDeviceById(id: Int): AddDevice?
 }

@@ -126,7 +126,7 @@ class DevicesPageActivity : AppCompatActivity() {
 
                 CoroutineScope(Dispatchers.IO).launch {
                     val existing =
-                        database.dao().getDeviceById(id) // <- this line prevents crashing
+                        database.dao().getDeviceById(id)
 
                     if (existing == null) {
                         database.dao().insertDevice(device)
@@ -165,7 +165,7 @@ class DevicesPageActivity : AppCompatActivity() {
             startActivity(Intent(this, HistoryPageActivity::class.java))
         }
 
-        // Underline "Cameras" title
+
         val textView = findViewById<TextView>(R.id.tvCameras)
         val content = SpannableString("Cameras")
         content.setSpan(UnderlineSpan(), 0, content.length, 0)
@@ -173,7 +173,6 @@ class DevicesPageActivity : AppCompatActivity() {
     }
 
     private fun addDeviceButton(name: String) {
-        // Container layout for button + menu icon
         val wrapperLayout = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             layoutParams = LinearLayout.LayoutParams(
@@ -185,7 +184,7 @@ class DevicesPageActivity : AppCompatActivity() {
             gravity = android.view.Gravity.CENTER_VERTICAL
         }
 
-        // Device button
+
         val newButton = Button(this).apply {
             text = name
             setBackgroundColor(android.graphics.Color.parseColor("#D3D3D3"))
@@ -197,13 +196,13 @@ class DevicesPageActivity : AppCompatActivity() {
             layoutParams = LinearLayout.LayoutParams(
                 0,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                1f  // take all available horizontal space except menu button
+                1f
             ).apply {
                 leftMargin = dpToPx(16)
             }
         }
 
-        // 3-dot overflow menu button
+
         val menuButton = ImageButton(this).apply {
             setImageResource(R.drawable.ic_more_vert)
             setBackgroundColor(android.graphics.Color.TRANSPARENT)
@@ -221,19 +220,21 @@ class DevicesPageActivity : AppCompatActivity() {
             popup.menuInflater.inflate(
                 R.menu.device_item_menu,
                 popup.menu
-            )  // create this menu resource
+            )
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.action_delete -> {
-                        // Show confirmation dialog
+
                         AlertDialog.Builder(this)
                             .setTitle("Delete Device")
                             .setMessage("Are you sure you want to delete \"$name\"?")
                             .setPositiveButton("Delete") { dialog, _ ->
-                                // Remove this device button from container
+
                                 deviceContainer.removeView(wrapperLayout)
 
-                                // TODO: Also delete from database if needed
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    database.dao().deleteDeviceByName(name)
+                                }
 
                                 dialog.dismiss()
                             }
@@ -250,11 +251,11 @@ class DevicesPageActivity : AppCompatActivity() {
             popup.show()
         }
 
-        // Add views to wrapper
+
         wrapperLayout.addView(newButton)
         wrapperLayout.addView(menuButton)
 
-        // Add wrapper to container
+
         deviceContainer.addView(wrapperLayout)
     }
 
