@@ -8,9 +8,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -21,6 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.core.content.ContextCompat
 
 class DevicesPageActivity : AppCompatActivity() {
 
@@ -93,18 +96,17 @@ class DevicesPageActivity : AppCompatActivity() {
                 customMenu.visibility = View.GONE
             }
         }
-        btnAddDevice.setOnClickListener{
-            if (AddDeviceMenu.visibility == View.GONE){
+        btnAddDevice.setOnClickListener {
+            if (AddDeviceMenu.visibility == View.GONE) {
                 AddDeviceMenu.visibility = View.VISIBLE
-            }
-            else{
+            } else {
                 AddDeviceMenu.visibility = View.GONE
             }
         }
-        menuProfile.setOnClickListener{
-            if (profileDropdown.visibility == View.GONE){
+        menuProfile.setOnClickListener {
+            if (profileDropdown.visibility == View.GONE) {
                 profileDropdown.visibility = View.VISIBLE
-            } else{
+            } else {
                 profileDropdown.visibility = View.GONE
             }
         }
@@ -123,7 +125,8 @@ class DevicesPageActivity : AppCompatActivity() {
                 val device = AddDevice(deviceid = id, devicename = name)
 
                 CoroutineScope(Dispatchers.IO).launch {
-                    val existing = database.dao().getDeviceById(id) // <- this line prevents crashing
+                    val existing =
+                        database.dao().getDeviceById(id) // <- this line prevents crashing
 
                     if (existing == null) {
                         database.dao().insertDevice(device)
@@ -135,7 +138,11 @@ class DevicesPageActivity : AppCompatActivity() {
                         }
                     } else {
                         withContext(Dispatchers.Main) {
-                            Toast.makeText(this@DevicesPageActivity, "Device ID already exists!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@DevicesPageActivity,
+                                "Device ID already exists!",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
@@ -166,15 +173,93 @@ class DevicesPageActivity : AppCompatActivity() {
     }
 
     private fun addDeviceButton(name: String) {
+        // Container layout for button + menu icon
+        val wrapperLayout = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(0, dpToPx(10), 0, dpToPx(10))
+            }
+            gravity = android.view.Gravity.CENTER_VERTICAL
+        }
+
+        // Device button
         val newButton = Button(this).apply {
             text = name
-            setBackgroundColor(android.graphics.Color.parseColor("#FFFFFF"))
-            setTextColor(android.graphics.Color.parseColor("#67AB7"))
-            textSize = 16f
-            setPadding(20, 20, 20, 20)
+            setBackgroundColor(android.graphics.Color.parseColor("#D3D3D3"))
+            setTextColor(android.graphics.Color.BLACK)
+            textSize = 18f
+            setPadding(dpToPx(20), dpToPx(20), dpToPx(20), dpToPx(20))
             setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_camera, 0)
-            compoundDrawablePadding = 16
+
+            layoutParams = LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1f  // take all available horizontal space except menu button
+            ).apply {
+                leftMargin = dpToPx(16)
+            }
         }
-        deviceContainer.addView(newButton)
+
+        // 3-dot overflow menu button
+        val menuButton = ImageButton(this).apply {
+            setImageResource(R.drawable.ic_more_vert)
+            setBackgroundColor(android.graphics.Color.TRANSPARENT)
+            layoutParams = LinearLayout.LayoutParams(
+                dpToPx(48),
+                dpToPx(48)
+            ).apply {
+                rightMargin = dpToPx(16)
+            }
+        }
+
+
+        menuButton.setOnClickListener { view ->
+            val popup = PopupMenu(this, view)
+            popup.menuInflater.inflate(
+                R.menu.device_item_menu,
+                popup.menu
+            )  // create this menu resource
+            popup.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.action_delete -> {
+                        // Show confirmation dialog
+                        AlertDialog.Builder(this)
+                            .setTitle("Delete Device")
+                            .setMessage("Are you sure you want to delete \"$name\"?")
+                            .setPositiveButton("Delete") { dialog, _ ->
+                                // Remove this device button from container
+                                deviceContainer.removeView(wrapperLayout)
+
+                                // TODO: Also delete from database if needed
+
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton("Cancel") { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .show()
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+            popup.show()
+        }
+
+        // Add views to wrapper
+        wrapperLayout.addView(newButton)
+        wrapperLayout.addView(menuButton)
+
+        // Add wrapper to container
+        deviceContainer.addView(wrapperLayout)
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        val density = resources.displayMetrics.density
+        return (dp * density).toInt()
     }
 }
