@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.owenoneil.aisecuritycamera.R
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 
 class AlertsPageActivity : AppCompatActivity() {
@@ -29,20 +31,24 @@ class AlertsPageActivity : AppCompatActivity() {
     private lateinit var btnlogin: Button
     private lateinit var btnlogout: Button
     private lateinit var menuProfile: Button
+    private lateinit var alertsContainer: LinearLayout
+    private lateinit var btnAddAlert: Button
+    private lateinit var database: DevicesDatabase
+    private val alertTypes = listOf("Person", "Potential Threat", "Motion")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_alerts_page)
 
-        // Handle system bars padding
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Find views
+
         btnHamburger = findViewById(R.id.btnHamburger)
         customMenu = findViewById(R.id.customMenu)
         profileDropdown = findViewById(R.id.profileDropdown)
@@ -53,8 +59,12 @@ class AlertsPageActivity : AppCompatActivity() {
         btnlogin = findViewById(R.id.btnlogin)
         btnlogout = findViewById(R.id.btnlogout)
         menuProfile = findViewById(R.id.menuProfile)
+        alertsContainer = findViewById(R.id.alertsContainer)
+        btnAddAlert = findViewById(R.id.btnAddAlert)
+        database = DevicesDatabase.getInstance(this)
 
-        // Toggle dropdown menu visibility on hamburger click
+
+
         btnHamburger.setOnClickListener {
             if (customMenu.visibility == View.GONE) {
                 customMenu.visibility = View.VISIBLE
@@ -85,9 +95,38 @@ class AlertsPageActivity : AppCompatActivity() {
             val intent = Intent(this, HistoryPageActivity::class.java)
             startActivity(intent)
         }
-        val textView = findViewById<TextView>(R.id.tvTodaysActivity)
-        val content = SpannableString("Today's Activity")
-        content.setSpan(UnderlineSpan(), 0, content.length, 0)
-        textView.text = content
+
+
+        // Load saved alerts from DB
+        lifecycleScope.launch {
+            val savedAlerts = database.alertDao().getAllAlerts()
+            for (alert in savedAlerts) {
+                addAlertButton(alert)
+            }
+        }
+
+
+        btnAddAlert.setOnClickListener {
+            val randomType = alertTypes.random()
+            val newAlert = AlertEntity(type = randomType)
+
+            lifecycleScope.launch {
+                val id = database.alertDao().insertAlert(newAlert)
+                // Add button to UI
+                addAlertButton(newAlert.copy(id = id.toInt()))
+            }
+        }
+    }
+
+
+    private fun addAlertButton(alert: AlertEntity) {
+        val alertButton = Button(this).apply {
+            text = alert.type
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply { setMargins(0, 8, 0, 8) }
+        }
+        alertsContainer.addView(alertButton)
     }
 }

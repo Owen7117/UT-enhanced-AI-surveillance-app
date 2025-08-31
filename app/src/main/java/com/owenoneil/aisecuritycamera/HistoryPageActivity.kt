@@ -37,14 +37,14 @@ class HistoryPageActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_history_page)
 
-        // Handle system bars padding
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Find views
+
         btnHamburger = findViewById(R.id.btnHamburger)
         customMenu = findViewById(R.id.customMenu)
         profileDropdown = findViewById(R.id.profileDropdown)
@@ -56,7 +56,7 @@ class HistoryPageActivity : AppCompatActivity() {
         btnlogout = findViewById(R.id.btnlogout)
         menuProfile = findViewById(R.id.menuProfile)
 
-        // Toggle dropdown menu visibility on hamburger click
+
         btnHamburger.setOnClickListener {
             if (customMenu.visibility == View.GONE) {
                 customMenu.visibility = View.VISIBLE
@@ -87,9 +87,5 @@ class HistoryPageActivity : AppCompatActivity() {
             val intent = Intent(this, AlertsPageActivity::class.java)
             startActivity(intent)
         }
-        val textView = findViewById<TextView>(R.id.tvAlertLog)
-        val content = SpannableString("Alert Log")
-        content.setSpan(UnderlineSpan(), 0, content.length, 0)
-        textView.text = content
     }
 }

@@ -9,7 +9,7 @@
     android:background="#673AB7">
 
 
-    <!-- Card container -->
+
 
     <ImageButton
         android:id="@+id/btnCloseLogin"

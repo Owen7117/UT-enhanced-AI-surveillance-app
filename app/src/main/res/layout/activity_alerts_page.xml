@@ -9,7 +9,7 @@
     tools:context=".MainActivity"
     android:background="#F9F9F9">
 
-    <!-- Top bar background -->
+
     <TextView
         android:id="@+id/tvAlertsPage"
         android:layout_width="0dp"
@@ -24,7 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Company badge -->
+
     <TextView
         android:id="@+id/tvCompanyName"
         android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Hamburger -->
+
     <ImageButton
         android:id="@+id/btnHamburger"
         android:layout_width="48dp"
@@ -55,7 +55,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="16dp" />
 
-    <!-- Rounded dropdown -->
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/customMenu"
         android:layout_width="wrap_content"
@@ -144,23 +144,32 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="120dp"
-        android:text="@string/underlined_today_activity"
+        android:text="Today's Activity"
         android:textColor="#333333"
         android:textSize="28sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Bottom nav -->
+    <View
+        android:layout_width="212dp"
+        android:layout_height="5dp"
+        android:background="#673AB7"
+        app:layout_constraintTop_toBottomOf="@id/tvTodaysActivity"
+        app:layout_constraintStart_toStartOf="@id/tvTodaysActivity"
+        app:layout_constraintEnd_toEndOf="@id/tvTodaysActivity"/>
+
+
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="90dp"
         android:background="#673AB7"
-        android:paddingHorizontal="8dp"
         android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/btnHome"
@@ -168,12 +177,12 @@
             android:layout_height="60dp"
             android:layout_weight="1"
             android:backgroundTint="#7E57C2"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
             android:text="Home"
             android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:gravity="center" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/btnDevices"
@@ -181,12 +190,12 @@
             android:layout_height="60dp"
             android:layout_weight="1"
             android:backgroundTint="#7E57C2"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
             android:text="Devices"
             android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:gravity="center" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/btnAlerts"
@@ -194,12 +203,12 @@
             android:layout_height="60dp"
             android:layout_weight="1"
             android:backgroundTint="#FFFFFF"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
             android:text="Alerts"
             android:textColor="#7E57C2"
-            android:textSize="14sp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:gravity="center" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/btnHistory"
@@ -207,12 +216,44 @@
             android:layout_height="60dp"
             android:layout_weight="1"
             android:backgroundTint="#7E57C2"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
             android:text="History"
             android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:gravity="center" />
+            android:textSize="14sp" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnAddAlert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Alert"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.809"
+        app:layout_constraintStart_toEndOf="@+id/tvTodaysActivity"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.202" />
+
+    <ScrollView
+        android:id="@+id/svAlerts"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/btnAddAlert"
+        app:layout_constraintBottom_toTopOf="@id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:id="@+id/alertsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

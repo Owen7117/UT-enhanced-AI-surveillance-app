@@ -8,7 +8,7 @@
     android:background="#F9F9F9"
     tools:context=".MainActivity">
 
-    <!-- Top bar background -->
+
     <TextView
         android:id="@+id/tvDevicesPage"
         android:layout_width="0dp"
@@ -23,7 +23,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Company badge -->
+
     <TextView
         android:id="@+id/tvCompanyName"
         android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Hamburger -->
+
     <ImageButton
         android:id="@+id/btnHamburger"
         android:layout_width="48dp"
@@ -54,7 +54,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="#FFFFFF" />
 
-    <!-- Rounded dropdown -->
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/customMenu"
         android:layout_width="wrap_content"
@@ -143,10 +143,20 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="120dp"
-        android:text="@string/underlined_cameras"
+        android:text="cameras"
         android:textSize="28sp"
+        android:textColor="#333333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="127dp"
+        android:layout_height="5dp"
+        android:background="#673AB7"
+        app:layout_constraintEnd_toEndOf="@id/tvCameras"
+        app:layout_constraintHorizontal_bias="0.447"
+        app:layout_constraintStart_toStartOf="@id/tvCameras"
+        app:layout_constraintTop_toBottomOf="@id/tvCameras" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -165,7 +175,7 @@
     </ScrollView>
 
 
-    <!-- Bottom nav -->
+
     <LinearLayout
         android:id="@+id/bottomNav"
         android:layout_width="0dp"

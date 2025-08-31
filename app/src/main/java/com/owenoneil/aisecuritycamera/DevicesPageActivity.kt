@@ -52,7 +52,7 @@ class DevicesPageActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_devices_page)
 
-        // Handle system bars padding
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -62,7 +62,7 @@ class DevicesPageActivity : AppCompatActivity() {
         database = DevicesDatabase.getInstance(this)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val savedDevices = database.dao().getAllDevices()
+            val savedDevices = database.deviceDao().getAllDevices()
             withContext(Dispatchers.Main) {
                 for (device in savedDevices) {
                     addDeviceButton(device.devicename)
@@ -70,7 +70,7 @@ class DevicesPageActivity : AppCompatActivity() {
             }
         }
 
-        // Find views
+
         btnHamburger = findViewById(R.id.btnHamburger)
         customMenu = findViewById(R.id.customMenu)
         btnAddDevice = findViewById(R.id.btnAddDevice)
@@ -88,7 +88,7 @@ class DevicesPageActivity : AppCompatActivity() {
         btnlogout = findViewById(R.id.btnlogout)
         menuProfile = findViewById(R.id.menuProfile)
 
-        // Toggle dropdown menu visibility on hamburger click
+
         btnHamburger.setOnClickListener {
             if (customMenu.visibility == View.GONE) {
                 customMenu.visibility = View.VISIBLE
@@ -126,10 +126,10 @@ class DevicesPageActivity : AppCompatActivity() {
 
                 CoroutineScope(Dispatchers.IO).launch {
                     val existing =
-                        database.dao().getDeviceById(id)
+                        database.deviceDao().getDeviceById(id)
 
                     if (existing == null) {
-                        database.dao().insertDevice(device)
+                        database.deviceDao().insertDevice(device)
                         withContext(Dispatchers.Main) {
                             addDeviceButton(name)
                             AddDeviceMenu.visibility = View.GONE
@@ -164,12 +164,6 @@ class DevicesPageActivity : AppCompatActivity() {
         btnHistory.setOnClickListener {
             startActivity(Intent(this, HistoryPageActivity::class.java))
         }
-
-
-        val textView = findViewById<TextView>(R.id.tvCameras)
-        val content = SpannableString("Cameras")
-        content.setSpan(UnderlineSpan(), 0, content.length, 0)
-        textView.text = content
     }
 
     private fun addDeviceButton(name: String) {
@@ -233,7 +227,7 @@ class DevicesPageActivity : AppCompatActivity() {
                                 deviceContainer.removeView(wrapperLayout)
 
                                 CoroutineScope(Dispatchers.IO).launch {
-                                    database.dao().deleteDeviceByName(name)
+                                    database.deviceDao().deleteDeviceByName(name)
                                 }
 
                                 dialog.dismiss()

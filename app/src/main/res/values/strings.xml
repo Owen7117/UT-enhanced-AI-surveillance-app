@@ -1,8 +1,4 @@
 <resources>
     <string name="app_name">AI Security Camera</string>
-    <string name="underlined_pinned_devices">Pinned Devices</string>
-    <string name="underlined_cameras">Cameras</string>
-    <string name="underlined_today_activity">Today\'s Activity</string>
-    <string name="underlined_alert_log">Alert Log</string>
 
 </resources>
