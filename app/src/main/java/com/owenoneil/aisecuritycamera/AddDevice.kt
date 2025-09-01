@@ -12,5 +12,12 @@ data class AddDevice(
 @Entity(tableName = "alerts")
 data class AlertEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val type: String,
+    val timestamp: Long = System.currentTimeMillis()
+)
+
+@Entity(tableName = "history_alerts")
+data class HistoryAlertEntity(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val type: String
 )

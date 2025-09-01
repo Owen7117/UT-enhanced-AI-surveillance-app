@@ -1,19 +1,18 @@
 package com.owenoneil.aisecuritycamera
+
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
-    entities = [AddDevice::class, AlertEntity::class],
-    version = 2
+    entities = [AddDevice::class, AlertEntity::class, HistoryAlertEntity::class],
+    version = 4 // bumped version to avoid schema mismatch
 )
 abstract class DevicesDatabase : RoomDatabase() {
-
     abstract fun deviceDao(): AddDeviceDao
     abstract fun alertDao(): AlertDao
+    abstract fun historyAlertDao(): HistoryAlertDao
 
     companion object {
         @Volatile
@@ -21,26 +20,13 @@ abstract class DevicesDatabase : RoomDatabase() {
 
         fun getInstance(context: Context): DevicesDatabase {
             return INSTANCE ?: synchronized(this) {
-
-
-                val MIGRATION_1_2 = object : Migration(1, 2) {
-                    override fun migrate(database: SupportSQLiteDatabase) {
-                        database.execSQL(
-                            "CREATE TABLE IF NOT EXISTS `alerts` (" +
-                                    "`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                                    "`type` TEXT NOT NULL)"
-                        )
-                    }
-                }
-
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     DevicesDatabase::class.java,
                     "devices_database"
                 )
-                    .addMigrations(MIGRATION_1_2)
+                    .fallbackToDestructiveMigration()
                     .build()
-
                 INSTANCE = instance
                 instance
             }

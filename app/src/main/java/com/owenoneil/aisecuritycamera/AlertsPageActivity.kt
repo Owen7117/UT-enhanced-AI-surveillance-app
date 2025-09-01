@@ -1,38 +1,36 @@
 package com.owenoneil.aisecuritycamera
+
 import android.content.Intent
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.owenoneil.aisecuritycamera.R
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
-
 
 class AlertsPageActivity : AppCompatActivity() {
 
     private lateinit var btnHamburger: ImageButton
     private lateinit var customMenu: View
+    private lateinit var profileDropdown: View
 
-    // Add buttons from bottom nav
+    // Bottom nav buttons
     private lateinit var btnHome: Button
     private lateinit var btnDevices: Button
     private lateinit var btnAlerts: Button
     private lateinit var btnHistory: Button
-    private lateinit var profileDropdown: View
     private lateinit var btnlogin: Button
     private lateinit var btnlogout: Button
     private lateinit var menuProfile: Button
+
     private lateinit var alertsContainer: LinearLayout
     private lateinit var btnAddAlert: Button
+
     private lateinit var database: DevicesDatabase
     private val alertTypes = listOf("Person", "Potential Threat", "Motion")
 
@@ -41,14 +39,13 @@ class AlertsPageActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_alerts_page)
 
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-
+        // Initialize views
         btnHamburger = findViewById(R.id.btnHamburger)
         customMenu = findViewById(R.id.customMenu)
         profileDropdown = findViewById(R.id.profileDropdown)
@@ -59,69 +56,66 @@ class AlertsPageActivity : AppCompatActivity() {
         btnlogin = findViewById(R.id.btnlogin)
         btnlogout = findViewById(R.id.btnlogout)
         menuProfile = findViewById(R.id.menuProfile)
-        alertsContainer = findViewById(R.id.alertsContainer)
+        alertsContainer = findViewById(R.id.alertsContainerAlerts)
         btnAddAlert = findViewById(R.id.btnAddAlert)
+
         database = DevicesDatabase.getInstance(this)
 
+        setupMenu()
+        setupBottomNav()
+        loadSavedAlerts()
 
+        btnAddAlert.setOnClickListener {
+            addNewAlert()
+        }
+    }
 
+    private fun setupMenu() {
         btnHamburger.setOnClickListener {
-            if (customMenu.visibility == View.GONE) {
-                customMenu.visibility = View.VISIBLE
-            } else {
-                customMenu.visibility = View.GONE
-            }
+            customMenu.visibility = if (customMenu.visibility == View.GONE) View.VISIBLE else View.GONE
         }
-        menuProfile.setOnClickListener{
-            if (profileDropdown.visibility == View.GONE){
-                profileDropdown.visibility = View.VISIBLE
-            } else{
-                profileDropdown.visibility = View.GONE
-            }
+        menuProfile.setOnClickListener {
+            profileDropdown.visibility = if (profileDropdown.visibility == View.GONE) View.VISIBLE else View.GONE
         }
-        btnlogin.setOnClickListener{
-            val intent = Intent(this,LoginPageActivity::class.java)
-            startActivity(intent)
+        btnlogin.setOnClickListener {
+            startActivity(Intent(this, LoginPageActivity::class.java))
         }
-        btnHome.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
-        btnDevices.setOnClickListener{
-            val intent = Intent(this, DevicesPageActivity::class.java)
-            startActivity(intent)
-        }
-        btnHistory.setOnClickListener {
-            val intent = Intent(this, HistoryPageActivity::class.java)
-            startActivity(intent)
-        }
+    }
 
+    private fun setupBottomNav() {
+        btnHome.setOnClickListener { startActivity(Intent(this, MainActivity::class.java)) }
+        btnDevices.setOnClickListener { startActivity(Intent(this, DevicesPageActivity::class.java)) }
+        btnAlerts.setOnClickListener { /* Already on Alerts */ }
+        btnHistory.setOnClickListener { startActivity(Intent(this, HistoryPageActivity::class.java)) }
+    }
 
-        // Load saved alerts from DB
+    private fun loadSavedAlerts() {
         lifecycleScope.launch {
             val savedAlerts = database.alertDao().getAllAlerts()
             for (alert in savedAlerts) {
-                addAlertButton(alert)
-            }
-        }
-
-
-        btnAddAlert.setOnClickListener {
-            val randomType = alertTypes.random()
-            val newAlert = AlertEntity(type = randomType)
-
-            lifecycleScope.launch {
-                val id = database.alertDao().insertAlert(newAlert)
-                // Add button to UI
-                addAlertButton(newAlert.copy(id = id.toInt()))
+                addAlertButton(alert.type)
             }
         }
     }
 
+    private fun addNewAlert() {
+        val randomType = alertTypes.random()
+        val newAlert = AlertEntity(type = randomType)
+        val historyAlert = HistoryAlertEntity(type = randomType)
 
-    private fun addAlertButton(alert: AlertEntity) {
+        lifecycleScope.launch {
+            // Insert into Alerts table
+            val alertId = database.alertDao().insertAlert(newAlert)
+            addAlertButton(newAlert.copy(id = alertId.toInt()).type)
+
+            // Insert into History table
+            database.historyAlertDao().insertHistoryAlert(historyAlert)
+        }
+    }
+
+    private fun addAlertButton(type: String) {
         val alertButton = Button(this).apply {
-            text = alert.type
+            text = type
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT

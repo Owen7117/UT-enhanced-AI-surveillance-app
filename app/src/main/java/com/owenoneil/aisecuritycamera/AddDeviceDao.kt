@@ -34,4 +34,19 @@ interface AlertDao {
 
     @Query("DELETE FROM alerts WHERE id = :id")
     suspend fun deleteAlertById(id: Int)
+
+    @Query("SELECT * FROM alerts WHERE date(timestamp / 1000, 'unixepoch') = date(:today / 1000, 'unixepoch')")
+    suspend fun getTodaysAlerts(today: Long): List<AlertEntity>
+}
+
+@Dao
+interface HistoryAlertDao {
+    @Insert
+    suspend fun insertHistoryAlert(alert: HistoryAlertEntity): Long
+
+    @Query("SELECT * FROM history_alerts")
+    suspend fun getAllHistoryAlerts(): List<HistoryAlertEntity>
+
+    @Query("DELETE FROM history_alerts WHERE id = :id")
+    suspend fun deleteHistoryAlertById(id: Int)
 }
