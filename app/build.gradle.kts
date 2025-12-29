@@ -49,6 +49,13 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation("io.github.jan-tennert.supabase:supabase-kt:2.5.4")
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.5.4")
+
+    implementation("io.ktor:ktor-client-okhttp:2.3.7")
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.7")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.7")
+
 
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
