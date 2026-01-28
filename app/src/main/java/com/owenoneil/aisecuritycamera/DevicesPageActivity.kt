@@ -1,29 +1,22 @@
 package com.owenoneil.aisecuritycamera
 import android.content.Intent
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.PopupMenu
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.setPadding
-import androidx.room.Room
-import com.owenoneil.aisecuritycamera.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import androidx.core.content.ContextCompat
 
 class DevicesPageActivity : AppCompatActivity() {
 
@@ -44,7 +37,7 @@ class DevicesPageActivity : AppCompatActivity() {
     private lateinit var btnlogout: Button
     private lateinit var menuProfile: Button
 
-    private lateinit var database: DevicesDatabase
+//    private lateinit var database: DevicesDatabase
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,16 +52,16 @@ class DevicesPageActivity : AppCompatActivity() {
             insets
         }
 
-        database = DevicesDatabase.getInstance(this)
+//        database = DevicesDatabase.getInstance(this)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val savedDevices = database.deviceDao().getAllDevices()
-            withContext(Dispatchers.Main) {
-                for (device in savedDevices) {
-                    addDeviceButton(device.devicename)
-                }
-            }
-        }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val savedDevices = database.deviceDao().getAllDevices()
+//            withContext(Dispatchers.Main) {
+//                for (device in savedDevices) {
+//                    addDeviceButton(device.devicename)
+//                }
+//            }
+//        }
 
 
         btnHamburger = findViewById(R.id.btnHamburger)
@@ -122,30 +115,30 @@ class DevicesPageActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
-                val device = AddDevice(deviceid = id, devicename = name)
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    val existing =
-                        database.deviceDao().getDeviceById(id)
-
-                    if (existing == null) {
-                        database.deviceDao().insertDevice(device)
-                        withContext(Dispatchers.Main) {
-                            addDeviceButton(name)
-                            AddDeviceMenu.visibility = View.GONE
-                            etDeviceName.text.clear()
-                            etDeviceCode.text.clear()
-                        }
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(
-                                this@DevicesPageActivity,
-                                "Device ID already exists!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                }
+//                val device = AddDevice(deviceid = id, devicename = name)
+//
+//                CoroutineScope(Dispatchers.IO).launch {
+//                    val existing =
+//                        database.deviceDao().getDeviceById(id)
+//
+//                    if (existing == null) {
+//                        database.deviceDao().insertDevice(device)
+//                        withContext(Dispatchers.Main) {
+//                            addDeviceButton(name)
+//                            AddDeviceMenu.visibility = View.GONE
+//                            etDeviceName.text.clear()
+//                            etDeviceCode.text.clear()
+//                        }
+//                    } else {
+//                        withContext(Dispatchers.Main) {
+//                            Toast.makeText(
+//                                this@DevicesPageActivity,
+//                                "Device ID already exists!",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        }
+//                    }
+//                }
             } else {
                 Toast.makeText(this, "Please enter both name and ID", Toast.LENGTH_SHORT).show()
             }
@@ -227,7 +220,7 @@ class DevicesPageActivity : AppCompatActivity() {
                                 deviceContainer.removeView(wrapperLayout)
 
                                 CoroutineScope(Dispatchers.IO).launch {
-                                    database.deviceDao().deleteDeviceByName(name)
+//                                    database.deviceDao().deleteDeviceByName(name)
                                 }
 
                                 dialog.dismiss()

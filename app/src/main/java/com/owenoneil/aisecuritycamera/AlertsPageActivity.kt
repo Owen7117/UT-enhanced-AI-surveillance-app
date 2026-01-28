@@ -31,7 +31,7 @@ class AlertsPageActivity : AppCompatActivity() {
     private lateinit var alertsContainer: LinearLayout
     private lateinit var btnAddAlert: Button
 
-    private lateinit var database: DevicesDatabase
+//    private lateinit var database: DevicesDatabase
     private val alertTypes = listOf("Person", "Potential Threat", "Motion")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,14 +59,14 @@ class AlertsPageActivity : AppCompatActivity() {
         alertsContainer = findViewById(R.id.alertsContainerAlerts)
         btnAddAlert = findViewById(R.id.btnAddAlert)
 
-        database = DevicesDatabase.getInstance(this)
+//        database = DevicesDatabase.getInstance(this)
 
         setupMenu()
         setupBottomNav()
-        loadSavedAlerts()
+//        loadSavedAlerts()
 
         btnAddAlert.setOnClickListener {
-            addNewAlert()
+//            addNewAlert()
         }
     }
 
@@ -89,29 +89,29 @@ class AlertsPageActivity : AppCompatActivity() {
         btnHistory.setOnClickListener { startActivity(Intent(this, HistoryPageActivity::class.java)) }
     }
 
-    private fun loadSavedAlerts() {
-        lifecycleScope.launch {
-            val savedAlerts = database.alertDao().getAllAlerts()
-            for (alert in savedAlerts) {
-                addAlertButton(alert.type)
-            }
-        }
-    }
+//    private fun loadSavedAlerts() {
+//        lifecycleScope.launch {
+//            val savedAlerts = database.alertDao().getAllAlerts()
+//            for (alert in savedAlerts) {
+//                addAlertButton(alert.type)
+//            }
+//        }
+//    }
 
-    private fun addNewAlert() {
-        val randomType = alertTypes.random()
-        val newAlert = AlertEntity(type = randomType)
-        val historyAlert = HistoryAlertEntity(type = randomType)
-
-        lifecycleScope.launch {
-            // Insert into Alerts table
-            val alertId = database.alertDao().insertAlert(newAlert)
-            addAlertButton(newAlert.copy(id = alertId.toInt()).type)
-
-            // Insert into History table
-            database.historyAlertDao().insertHistoryAlert(historyAlert)
-        }
-    }
+//    private fun addNewAlert() {
+//        val randomType = alertTypes.random()
+//        val newAlert = AlertEntity(type = randomType)
+//        val historyAlert = HistoryAlertEntity(type = randomType)
+//
+//        lifecycleScope.launch {
+//            // Insert into Alerts table
+//            val alertId = database.alertDao().insertAlert(newAlert)
+//            addAlertButton(newAlert.copy(id = alertId.toInt()).type)
+//
+//            // Insert into History table
+//            database.historyAlertDao().insertHistoryAlert(historyAlert)
+//        }
+//    }
 
     private fun addAlertButton(type: String) {
         val alertButton = Button(this).apply {

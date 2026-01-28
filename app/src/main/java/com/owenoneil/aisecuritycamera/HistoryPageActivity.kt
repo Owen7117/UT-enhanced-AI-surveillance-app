@@ -31,7 +31,7 @@ class HistoryPageActivity : AppCompatActivity() {
     private lateinit var btnlogin: Button
     private lateinit var btnlogout: Button
     private lateinit var menuProfile: Button
-    private lateinit var database: DevicesDatabase
+//    private lateinit var database: DevicesDatabase
     private lateinit var alertsContainerHistory: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +57,7 @@ class HistoryPageActivity : AppCompatActivity() {
         btnlogout = findViewById(R.id.btnlogout)
         menuProfile = findViewById(R.id.menuProfile)
         alertsContainerHistory = findViewById(R.id.alertsContainerHistory)
-        database = DevicesDatabase.getInstance(this)
+//        database = DevicesDatabase.getInstance(this)
 
         // Bottom nav listeners
         btnHamburger.setOnClickListener {
@@ -73,21 +73,21 @@ class HistoryPageActivity : AppCompatActivity() {
 
         // Load all history alerts
         lifecycleScope.launch {
-            val historyAlerts = database.historyAlertDao().getAllHistoryAlerts()
-            for (alert in historyAlerts) {
-                addHistoryAlertButton(alert)
-            }
+//            val historyAlerts = database.historyAlertDao().getAllHistoryAlerts()
+//            for (alert in historyAlerts) {
+//                addHistoryAlertButton(alert)
+//            }
         }
     }
 
-    private fun addHistoryAlertButton(alert: HistoryAlertEntity) {
-        val button = Button(this).apply {
-            text = alert.type
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply { setMargins(0, 8, 0, 8) }
-        }
-        alertsContainerHistory.addView(button)
-    }
+//    private fun addHistoryAlertButton(alert: HistoryAlertEntity) {
+//        val button = Button(this).apply {
+//            text = alert.type
+//            layoutParams = LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.MATCH_PARENT,
+//                LinearLayout.LayoutParams.WRAP_CONTENT
+//            ).apply { setMargins(0, 8, 0, 8) }
+//        }
+//        alertsContainerHistory.addView(button)
+//    }
 }

@@ -28,11 +28,10 @@
         android:layout_width="96dp"
         android:layout_height="56dp"
         android:src="@drawable/ic_profile_empty"
-        app:civ_border_width="2dp"
         app:layout_constraintBottom_toTopOf="@+id/cardRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:tint="#FFFF" />
+        app:tint="#FFFFFF" />
 
 
     <androidx.cardview.widget.CardView
