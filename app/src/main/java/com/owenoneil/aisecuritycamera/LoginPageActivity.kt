@@ -8,8 +8,6 @@ import android.widget.EditText
 import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
 
 class LoginPageActivity : AppCompatActivity() {
@@ -23,12 +21,8 @@ class LoginPageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_login_page_avtivity)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        setContentView(R.layout.activity_login_page)
+
         btnCloseLogin = findViewById(R.id.btnCloseLogin)
         btnloginpagelogin = findViewById(R.id.btnloginpagelogin)
         etPasswordLogin = findViewById(R.id.etPasswordLogin)

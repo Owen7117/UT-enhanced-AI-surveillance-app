@@ -16,7 +16,7 @@ import androidx.core.view.WindowInsetsCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 
 class DevicesPageActivity : AppCompatActivity() {
 
@@ -37,31 +37,11 @@ class DevicesPageActivity : AppCompatActivity() {
     private lateinit var btnlogout: Button
     private lateinit var menuProfile: Button
 
-//    private lateinit var database: DevicesDatabase
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_devices_page)
-
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
-//        database = DevicesDatabase.getInstance(this)
-
-//        CoroutineScope(Dispatchers.IO).launch {
-//            val savedDevices = database.deviceDao().getAllDevices()
-//            withContext(Dispatchers.Main) {
-//                for (device in savedDevices) {
-//                    addDeviceButton(device.devicename)
-//                }
-//            }
-//        }
 
 
         btnHamburger = findViewById(R.id.btnHamburger)
@@ -115,30 +95,6 @@ class DevicesPageActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
-//                val device = AddDevice(deviceid = id, devicename = name)
-//
-//                CoroutineScope(Dispatchers.IO).launch {
-//                    val existing =
-//                        database.deviceDao().getDeviceById(id)
-//
-//                    if (existing == null) {
-//                        database.deviceDao().insertDevice(device)
-//                        withContext(Dispatchers.Main) {
-//                            addDeviceButton(name)
-//                            AddDeviceMenu.visibility = View.GONE
-//                            etDeviceName.text.clear()
-//                            etDeviceCode.text.clear()
-//                        }
-//                    } else {
-//                        withContext(Dispatchers.Main) {
-//                            Toast.makeText(
-//                                this@DevicesPageActivity,
-//                                "Device ID already exists!",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                        }
-//                    }
-//                }
             } else {
                 Toast.makeText(this, "Please enter both name and ID", Toast.LENGTH_SHORT).show()
             }

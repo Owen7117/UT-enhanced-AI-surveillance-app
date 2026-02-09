@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
-//    alias(libs.plugins.kotlin.android)
-//    alias(libs.plugins.ksp)
+    kotlin("plugin.serialization") version "1.9.23"
 }
 
 android {
@@ -10,8 +9,9 @@ android {
 
     defaultConfig {
         applicationId = "com.owenoneil.aisecuritycamera"
-        minSdk = 36
+        minSdk = 26
         targetSdk = 36
+        compileSdk = 36
 
         versionCode = 1
         versionName = "1.0"
@@ -50,20 +50,17 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.recyclerview)
-
-    // Material
     implementation(libs.material)
 
-    // Supabase
-    implementation("io.github.jan-tennert.supabase:supabase-kt:3.2.1")
-    implementation("io.github.jan-tennert.supabase:postgrest-kt:3.2.1")
-    implementation("io.github.jan-tennert.supabase:auth-kt:3.2.1")
-    implementation("io.github.jan-tennert.supabase:realtime-kt:3.2.1")
+    implementation("io.ktor:ktor-client-core:3.4.0")
+    implementation("io.ktor:ktor-client-android:3.4.0")
+    implementation("io.ktor:ktor-client-content-negotiation:3.4.0")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.4.0")
 
-    // Room
-//    implementation(libs.room.runtime)
-//    implementation(libs.room.ktx)
-//    implementation(libs.room.compiler)
+    implementation("io.github.jan-tennert.supabase:supabase-kt:3.3.0")
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:3.3.0")
+    implementation("io.github.jan-tennert.supabase:auth-kt:3.3.0")
+    implementation(libs.places)
 
     // Testing
     testImplementation(libs.junit)
