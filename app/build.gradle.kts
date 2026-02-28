@@ -57,10 +57,13 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:3.4.0")
     implementation("io.ktor:ktor-serialization-kotlinx-json:3.4.0")
 
+    implementation("io.github.jan-tennert.supabase:realtime-kt:3.3.0")
     implementation("io.github.jan-tennert.supabase:supabase-kt:3.3.0")
     implementation("io.github.jan-tennert.supabase:postgrest-kt:3.3.0")
     implementation("io.github.jan-tennert.supabase:auth-kt:3.3.0")
     implementation(libs.places)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
 
     // Testing
     testImplementation(libs.junit)

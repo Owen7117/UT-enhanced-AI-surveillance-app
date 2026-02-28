@@ -157,8 +157,19 @@
         app:layout_constraintStart_toStartOf="@+id/tvPinnedDevice"
         app:layout_constraintEnd_toEndOf="@+id/tvPinnedDevice"/>
 
+    <WebView
+        android:id="@+id/youtubeWebView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tvPinnedDevice"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 
     <LinearLayout
+        android:id = "@+id/bottomNav"
         android:orientation="horizontal"
         android:layout_width="0dp"
         android:layout_height="90dp"

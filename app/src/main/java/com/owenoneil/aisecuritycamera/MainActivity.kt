@@ -1,26 +1,20 @@
 package com.owenoneil.aisecuritycamera
+
 import android.content.Intent
-import android.graphics.Paint
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.style.UnderlineSpan
 import android.view.View
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-
-
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var btnHamburger: ImageButton
     private lateinit var customMenu: View
 
-    // Add buttons from bottom nav
     private lateinit var btnHome: Button
     private lateinit var btnDevices: Button
     private lateinit var btnAlerts: Button
@@ -29,6 +23,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnlogin: Button
     private lateinit var btnlogout: Button
     private lateinit var menuProfile: Button
+
+    private lateinit var youtubeWebView: WebView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,37 +43,82 @@ class MainActivity : AppCompatActivity() {
         btnlogout = findViewById(R.id.btnlogout)
         menuProfile = findViewById(R.id.menuProfile)
 
+        youtubeWebView = findViewById(R.id.youtubeWebView)
+
+        youtubeWebView.webViewClient = WebViewClient()
+        youtubeWebView.settings.javaScriptEnabled = true
+        youtubeWebView.settings.domStorageEnabled = true
+        youtubeWebView.settings.mediaPlaybackRequiresUserGesture = false
+
+        val videoId = "TKdyfoEEWYw"
+
+        val html = """
+            <html>
+            <head>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+                body { margin:0; background:black; }
+                iframe { position:fixed; top:0; left:0; width:100%; height:100%; }
+            </style>
+            </head>
+            <body>
+                <iframe
+                    src="https://www.youtube.com/embed/$videoId?autoplay=1&controls=0&modestbranding=1&rel=0&showinfo=0"
+                    frameborder="0"
+                    allow="autoplay; encrypted-media"
+                    allowfullscreen>
+                </iframe>
+            </body>
+            </html>
+            """.trimIndent()
+
+        youtubeWebView.loadDataWithBaseURL(
+            "https://www.youtube.com",
+            html,
+            "text/html",
+            "utf-8",
+            null
+        )
 
         btnHamburger.setOnClickListener {
-            if (customMenu.visibility == View.GONE) {
-                customMenu.visibility = View.VISIBLE
-            } else {
-                customMenu.visibility = View.GONE
-            }
-        }
-        menuProfile.setOnClickListener{
-            if (profileDropdown.visibility == View.GONE){
-                profileDropdown.visibility = View.VISIBLE
-            } else{
-                profileDropdown.visibility = View.GONE
-            }
+            customMenu.visibility =
+                if (customMenu.visibility == View.GONE) View.VISIBLE else View.GONE
         }
 
-        btnlogin.setOnClickListener{
-            val intent = Intent(this,LoginPageActivity::class.java)
-            startActivity(intent)
+        menuProfile.setOnClickListener {
+            profileDropdown.visibility =
+                if (profileDropdown.visibility == View.GONE) View.VISIBLE else View.GONE
         }
-        btnDevices.setOnClickListener{
-            val intent = Intent(this,DevicesPageActivity::class.java)
-            startActivity(intent)
+
+        btnlogin.setOnClickListener {
+            startActivity(Intent(this, LoginPageActivity::class.java))
         }
+
+        btnDevices.setOnClickListener {
+            startActivity(Intent(this, DevicesPageActivity::class.java))
+        }
+
         btnAlerts.setOnClickListener {
-            val intent = Intent(this, AlertsPageActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, AlertsPageActivity::class.java))
         }
+
         btnHistory.setOnClickListener {
-            val intent = Intent(this, HistoryPageActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, HistoryPageActivity::class.java))
         }
+    }
+
+    override fun onPause() {
+        youtubeWebView.onPause()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        youtubeWebView.onResume()
+    }
+
+    override fun onDestroy() {
+        youtubeWebView.destroy()
+        super.onDestroy()
     }
 }

@@ -11,7 +11,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.realtime.PostgresAction
+import io.github.jan.supabase.realtime.channel
+import io.github.jan.supabase.realtime.postgresChangeFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class HistoryPageActivity : AppCompatActivity() {
 
@@ -22,6 +29,8 @@ class HistoryPageActivity : AppCompatActivity() {
     private lateinit var btnAlerts: Button
     private lateinit var btnHistory: Button
     private lateinit var alertsContainerHistory: LinearLayout
+
+    private lateinit var historyChannel: io.github.jan.supabase.realtime.RealtimeChannel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,10 +66,34 @@ class HistoryPageActivity : AppCompatActivity() {
 
         // Load history
         loadHistory()
+
+        // Listen for realtime updates
+        //listenForHistoryUpdates()
+    }
+
+    private fun listenForHistoryUpdates() {
+        lifecycleScope.launch {
+            try {
+                historyChannel = SupabaseClientProvider.client.channel("public:history")
+                historyChannel.subscribe()
+
+                historyChannel.postgresChangeFlow<PostgresAction.Insert>(schema = "public") {
+                    table = "history"
+                }.collect { change ->
+                    System.out.println("Alert deteceted")
+                    val recordJson = Json.encodeToString(change.record)
+                    val newAlert = Json.decodeFromString<HistoryAlert>(recordJson)
+                    runOnUiThread {addHistoryRow(newAlert)
+                   }
+                }
+
+            } catch (e: Exception) {
+                Log.e("HISTORY_REALTIME", "Realtime failed", e)
+            }
+        }
     }
 
     private fun loadHistory() {
-
         lifecycleScope.launch {
             try {
                 val historyList = SupabaseClientProvider.client
@@ -82,19 +115,21 @@ class HistoryPageActivity : AppCompatActivity() {
         }
     }
 
-    private fun addHistoryRow(alert: HistoryAlert) {
+    private fun addHistoryRow(alert: HistoryAlert, addToTop: Boolean = false) {
         val displayTime = alert.created_at.replace("T", " ")
         val rowButton = Button(this).apply {
-            text = "${alert.alert}: ${displayTime} "
+            text = "${alert.alert}: $displayTime"
             isAllCaps = false
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                setMargins(0, 10, 0, 10)
-            }
+            ).apply { setMargins(0, 10, 0, 10) }
         }
-        alertsContainerHistory.addView(rowButton)
+        if (addToTop) {
+            alertsContainerHistory.addView(rowButton, 0)
+        } else {
+            alertsContainerHistory.addView(rowButton)
+        }
     }
 
     private fun addEmptyView() {
