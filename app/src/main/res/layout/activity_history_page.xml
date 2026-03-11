@@ -185,18 +185,7 @@
             android:ellipsize="end"
             android:gravity="center" />
 
-        <Button
-            android:id="@+id/btnDevices"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:backgroundTint="#7E57C2"
-            android:text="Devices"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:gravity="center" />
+
 
         <Button
             android:id="@+id/btnAlerts"

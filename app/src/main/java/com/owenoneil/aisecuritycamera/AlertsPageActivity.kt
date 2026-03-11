@@ -19,7 +19,6 @@ class AlertsPageActivity : AppCompatActivity() {
     private lateinit var btnHamburger: ImageButton
     private lateinit var customMenu: View
     private lateinit var btnHome: Button
-    private lateinit var btnDevices: Button
     private lateinit var btnAlerts: Button
     private lateinit var btnHistory: Button
     private lateinit var alertsContainer: LinearLayout
@@ -32,7 +31,6 @@ class AlertsPageActivity : AppCompatActivity() {
         btnHamburger = findViewById(R.id.btnHamburger)
         customMenu = findViewById(R.id.customMenu)
         btnHome = findViewById(R.id.btnHome)
-        btnDevices = findViewById(R.id.btnDevices)
         btnAlerts = findViewById(R.id.btnAlerts)
         btnHistory = findViewById(R.id.btnHistory)
         alertsContainer = findViewById(R.id.alertsContainerTempHistory)
@@ -44,9 +42,6 @@ class AlertsPageActivity : AppCompatActivity() {
 
         btnHome.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
-        }
-        btnDevices.setOnClickListener {
-            startActivity(Intent(this, DevicesPageActivity::class.java))
         }
         btnHistory.setOnClickListener {
             startActivity(Intent(this, HistoryPageActivity::class.java))

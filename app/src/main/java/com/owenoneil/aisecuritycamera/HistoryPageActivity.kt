@@ -25,7 +25,6 @@ class HistoryPageActivity : AppCompatActivity() {
     private lateinit var btnHamburger: ImageButton
     private lateinit var customMenu: View
     private lateinit var btnHome: Button
-    private lateinit var btnDevices: Button
     private lateinit var btnAlerts: Button
     private lateinit var btnHistory: Button
     private lateinit var alertsContainerHistory: LinearLayout
@@ -41,7 +40,6 @@ class HistoryPageActivity : AppCompatActivity() {
         btnHamburger = findViewById(R.id.btnHamburger)
         customMenu = findViewById(R.id.customMenu)
         btnHome = findViewById(R.id.btnHome)
-        btnDevices = findViewById(R.id.btnDevices)
         btnAlerts = findViewById(R.id.btnAlerts)
         btnHistory = findViewById(R.id.btnHistory)
         alertsContainerHistory = findViewById(R.id.alertsContainerHistory)
@@ -55,9 +53,6 @@ class HistoryPageActivity : AppCompatActivity() {
         // Bottom navigation
         btnHome.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
-        }
-        btnDevices.setOnClickListener {
-            startActivity(Intent(this, DevicesPageActivity::class.java))
         }
         btnAlerts.setOnClickListener {
             startActivity(Intent(this, AlertsPageActivity::class.java))
@@ -92,6 +87,7 @@ class HistoryPageActivity : AppCompatActivity() {
             }
         }
     }
+
 
     private fun loadHistory() {
         lifecycleScope.launch {
