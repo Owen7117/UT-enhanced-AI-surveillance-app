@@ -9,7 +9,6 @@
     tools:context=".MainActivity"
     android:background="#F9F9F9">
 
-
     <TextView
         android:id="@+id/tvHomePage"
         android:layout_width="0dp"
@@ -23,7 +22,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <TextView
         android:id="@+id/tvCompanyName"
@@ -54,150 +52,92 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="16dp" />
 
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/customMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginTop="4dp"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="12dp"
-        app:layout_constraintTop_toBottomOf="@id/btnHamburger"
-        app:layout_constraintEnd_toEndOf="@id/btnHamburger">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@android:color/white"
-            android:padding="12dp">
-
-            <Button
-                android:id="@+id/menuProfile"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:text="Profile"
-                android:backgroundTint="#673AB7"
-                android:textColor="#FFFFFF"
-                android:layout_marginTop="8dp"/>
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/profileDropdown"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_marginTop="4dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="12dp">
-
-                <LinearLayout
-                    android:layout_width="191dp"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/white"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-
-                    <Button
-                        android:id="@+id/btnlogin"
-                        android:layout_width="160dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:backgroundTint="#673AB7"
-                        android:text="Login"
-                        android:textColor="#FFFFFF" />
-
-                    <Button
-                        android:id="@+id/btnlogout"
-                        android:layout_width="160dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:backgroundTint="#673AB7"
-                        android:text="Logout"
-                        android:textColor="#FFFFFF" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <Button
-                android:id="@+id/menuSettings"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:text="Settings"
-                android:backgroundTint="#673AB7"
-                android:textColor="#FFFFFF"
-                android:layout_marginTop="8dp"/>
-
-            <Button
-                android:id="@+id/menuHelp"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:text="Help"
-                android:backgroundTint="#673AB7"
-                android:textColor="#FFFFFF"
-                android:layout_marginTop="8dp"/>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
     <TextView
-        android:id="@+id/tvPinnedDevice"
+        android:id="@+id/tvCameras"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="120dp"
-        android:text="Devices"
-        android:textColor="#333333"
+        android:text="Cameras"
         android:textSize="28sp"
+        android:textColor="#333333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:layout_width="212dp"
+        android:layout_width="127dp"
         android:layout_height="5dp"
         android:background="#673AB7"
-        app:layout_constraintTop_toBottomOf="@+id/tvPinnedDevice"
-        app:layout_constraintStart_toStartOf="@+id/tvPinnedDevice"
-        app:layout_constraintEnd_toEndOf="@+id/tvPinnedDevice"/>
+        app:layout_constraintEnd_toEndOf="@id/tvCameras"
+        app:layout_constraintHorizontal_bias="0.447"
+        app:layout_constraintStart_toStartOf="@id/tvCameras"
+        app:layout_constraintTop_toBottomOf="@id/tvCameras" />
 
-    <FrameLayout
-        android:id="@+id/videoFrame"
+    <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tvPinnedDevice"
-        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tvCameras"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav">
 
-        <!-- YouTube page -->
-        <WebView
-            android:id="@+id/youtubeWebView"
+        <LinearLayout
+            android:id="@+id/deviceContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+    </ScrollView>
 
-        <!-- top crop -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="#F9F9F9"
-            android:layout_gravity="top"/>
+    <Button
+        android:id="@+id/btnTempCam1"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#D3D3D3"
+        android:text="Cam 1"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/tvCameras"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <!-- bottom crop -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="373dp"
-            android:background="#F9F9F9"
-            android:layout_gravity="bottom"/>
+    <Button
+        android:id="@+id/btnAddDevice"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="127dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="108dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="#7E57C2"
+        android:gravity="end"
+        android:padding="10dp"
+        android:text="Add Device"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    </FrameLayout>
+    <ImageView
+        android:layout_width="22dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/btnAddDevice"
+        app:layout_constraintTop_toTopOf="@+id/btnAddDevice"
+        app:srcCompat="@android:drawable/ic_menu_add"
+        app:tint="#FFFFFF" />
 
     <LinearLayout
-        android:id = "@+id/bottomNav"
+        android:id="@+id/bottomNav"
         android:orientation="horizontal"
         android:layout_width="0dp"
         android:layout_height="90dp"
         android:background="#673AB7"
         android:paddingHorizontal="8dp"
         android:gravity="center"
-        android:windowTranslucentNavigation="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -208,7 +148,7 @@
             android:layout_height="60dp"
             android:layout_weight="1"
             android:backgroundTint="#FFFFFF"
-            android:text="Home"
+            android:text="Devices"
             android:textColor="#7E57C2"
             android:textSize="14sp"
             android:singleLine="true"
@@ -241,8 +181,5 @@
             android:ellipsize="end"
             android:gravity="center" />
     </LinearLayout>
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

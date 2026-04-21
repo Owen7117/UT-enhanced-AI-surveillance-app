@@ -3,91 +3,44 @@ package com.owenoneil.aisecuritycamera
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import io.github.jan.supabase.postgrest.from
-import io.github.jan.supabase.realtime.PostgresAction
-import io.github.jan.supabase.realtime.channel
-import io.github.jan.supabase.realtime.postgresChangeFlow
-import kotlinx.coroutines.flow.collect
+import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.launch
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class HistoryPageActivity : AppCompatActivity() {
 
-    private lateinit var btnHamburger: ImageButton
-    private lateinit var customMenu: View
     private lateinit var btnHome: Button
     private lateinit var btnAlerts: Button
     private lateinit var btnHistory: Button
     private lateinit var alertsContainerHistory: LinearLayout
-
-    private lateinit var historyChannel: io.github.jan.supabase.realtime.RealtimeChannel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_history_page)
 
-        // Bind views
-        btnHamburger = findViewById(R.id.btnHamburger)
-        customMenu = findViewById(R.id.customMenu)
         btnHome = findViewById(R.id.btnHome)
         btnAlerts = findViewById(R.id.btnAlerts)
         btnHistory = findViewById(R.id.btnHistory)
         alertsContainerHistory = findViewById(R.id.alertsContainerHistory)
 
-        // Hamburger menu toggle
-        btnHamburger.setOnClickListener {
-            customMenu.visibility =
-                if (customMenu.visibility == View.GONE) View.VISIBLE else View.GONE
-        }
-
-        // Bottom navigation
         btnHome.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
+
         btnAlerts.setOnClickListener {
             startActivity(Intent(this, AlertsPageActivity::class.java))
         }
-        btnHistory.setOnClickListener { /* already here */ }
 
-        // Load history
+        btnHistory.setOnClickListener { }
+
         loadHistory()
-
-        // Listen for realtime updates
-        //listenForHistoryUpdates()
     }
-
-    private fun listenForHistoryUpdates() {
-        lifecycleScope.launch {
-            try {
-                historyChannel = SupabaseClientProvider.client.channel("public:history")
-                historyChannel.subscribe()
-
-                historyChannel.postgresChangeFlow<PostgresAction.Insert>(schema = "public") {
-                    table = "history"
-                }.collect { change ->
-                    System.out.println("Alert deteceted")
-                    val recordJson = Json.encodeToString(change.record)
-                    val newAlert = Json.decodeFromString<HistoryAlert>(recordJson)
-                    runOnUiThread {addHistoryRow(newAlert)
-                   }
-                }
-
-            } catch (e: Exception) {
-                Log.e("HISTORY_REALTIME", "Realtime failed", e)
-            }
-        }
-    }
-
 
     private fun loadHistory() {
         lifecycleScope.launch {
@@ -111,21 +64,51 @@ class HistoryPageActivity : AppCompatActivity() {
         }
     }
 
-    private fun addHistoryRow(alert: HistoryAlert, addToTop: Boolean = false) {
+    private fun addHistoryRow(alert: HistoryAlert) {
         val displayTime = alert.created_at.replace("T", " ")
+
         val rowButton = Button(this).apply {
             text = "${alert.alert}: $displayTime"
             isAllCaps = false
+
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply { setMargins(0, 10, 0, 10) }
+            ).apply {
+                setMargins(0, 10, 0, 10)
+            }
+
+            setOnClickListener {
+                val path = alert.video_path   // <-- IMPORTANT: store this in DB
+
+                if (!path.isNullOrEmpty()) {
+                    lifecycleScope.launch {
+                        try {
+                            val storage = SupabaseClientProvider.client.storage
+
+                            // ✅ PUBLIC bucket
+                            val videoUrl = storage
+                                .from("videos")
+                                .publicUrl(path)
+
+                            // 🔒 If PRIVATE bucket, use this instead:
+                            // val videoUrl = storage
+                            //     .from("your-bucket-name")
+                            //     .createSignedUrl(path, 300)
+
+                            val intent = Intent(this@HistoryPageActivity, VideoPlayerActivity::class.java)
+                            intent.putExtra("video_url", videoUrl)
+                            startActivity(intent)
+
+                        } catch (e: Exception) {
+                            Log.e("VIDEO", "Failed to load video", e)
+                        }
+                    }
+                }
+            }
         }
-        if (addToTop) {
-            alertsContainerHistory.addView(rowButton, 0)
-        } else {
-            alertsContainerHistory.addView(rowButton)
-        }
+
+        alertsContainerHistory.addView(rowButton)
     }
 
     private fun addEmptyView() {
