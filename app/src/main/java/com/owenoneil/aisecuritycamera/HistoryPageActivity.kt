@@ -8,6 +8,8 @@ import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
 import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.launch
 
@@ -20,8 +22,10 @@ class HistoryPageActivity : AppCompatActivity() {
 
     // VIDEO OVERLAY
     private lateinit var videoOverlay: FrameLayout
-    private lateinit var videoView: VideoView
     private lateinit var btnCloseVideo: ImageButton
+    private lateinit var playerView: androidx.media3.ui.PlayerView
+    private lateinit var player: ExoPlayer
+    private var allowControllerShow = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,23 +38,45 @@ class HistoryPageActivity : AppCompatActivity() {
         alertsContainerHistory = findViewById(R.id.alertsContainerHistory)
 
         videoOverlay = findViewById(R.id.videoOverlay)
-        videoView = findViewById(R.id.videoView)
         btnCloseVideo = findViewById(R.id.btnCloseVideo)
+        playerView = findViewById(R.id.playerView)
 
+        // EXO PLAYER INIT
+        player = ExoPlayer.Builder(this).build()
+        playerView.player = player
+        playerView.hideController()
 
+        playerView.useController = true
+        playerView.controllerAutoShow = false
+        playerView.controllerHideOnTouch = false
 
-        btnHome.setOnClickListener {
-            finish()
+        playerView.setOnClickListener {
+            if (!player.isPlaying) {
+                if (playerView.isControllerFullyVisible) {
+                    playerView.hideController()
+                } else {
+                    playerView.showController()
+                }
+            }
         }
 
-        btnAlerts.setOnClickListener {
-            finish()
-        }
+        player.addListener(object : androidx.media3.common.Player.Listener {
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                playerView.post {
+                    if (isPlaying) {
+                        playerView.hideController()
+                    }
+                }
+            }
+        })
 
+
+        btnHome.setOnClickListener { finish() }
+        btnAlerts.setOnClickListener { finish() }
         btnHistory.setOnClickListener { }
 
         btnCloseVideo.setOnClickListener {
-            videoView.stopPlayback()
+            player.stop()
             videoOverlay.visibility = View.GONE
         }
 
@@ -64,7 +90,7 @@ class HistoryPageActivity : AppCompatActivity() {
                     .from("history")
                     .select()
                     .decodeList<HistoryAlert>()
-                    .sortedByDescending { it.created_at } // newest first
+                    .sortedByDescending { it.created_at }
 
                 alertsContainerHistory.removeAllViews()
 
@@ -108,19 +134,11 @@ class HistoryPageActivity : AppCompatActivity() {
 
                     videoOverlay.visibility = View.VISIBLE
 
-                    videoView.stopPlayback()
+                    val mediaItem = MediaItem.fromUri(videoUrl)
 
-                    videoView.setZOrderOnTop(true)
-                    videoView.holder.setFormat(android.graphics.PixelFormat.TRANSLUCENT)
-
-                    videoView.post {
-                        videoView.setOnPreparedListener { mp ->
-                            mp.isLooping = false
-                            videoView.start()
-                        }
-                        videoView.setVideoURI(Uri.parse(videoUrl))
-                        videoView.requestFocus()
-                    }
+                    player.setMediaItem(mediaItem)
+                    player.prepare()
+                    player.play()
                 }
 
             } else {
@@ -138,5 +156,10 @@ class HistoryPageActivity : AppCompatActivity() {
             isEnabled = false
         }
         alertsContainerHistory.addView(emptyView)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        player.release()
     }
 }

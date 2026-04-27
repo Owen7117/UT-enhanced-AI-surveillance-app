@@ -154,12 +154,13 @@
             android:foregroundGravity="center">
 
             <!-- Video (centered, not full height) -->
-            <VideoView
-                android:id="@+id/videoView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <androidx.media3.ui.PlayerView
+                android:id="@+id/playerView"
+                android:layout_width="320dp"
+                android:layout_height="520dp"
                 android:layout_gravity="center"
-                android:background="#000000"/>
+                android:background="#000000"
+                app:use_controller="false" />
         </FrameLayout>
 
         <!-- Close button -->
@@ -168,7 +169,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="top|end"
-            android:layout_margin="20dp"
+            android:layout_margin="30dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
             android:tint="#FFFFFF"
