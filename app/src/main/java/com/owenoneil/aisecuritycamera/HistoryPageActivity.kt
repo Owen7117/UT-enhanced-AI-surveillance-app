@@ -1,10 +1,10 @@
 package com.owenoneil.aisecuritycamera
 
-import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.LinearLayout
+import android.view.View
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +18,11 @@ class HistoryPageActivity : AppCompatActivity() {
     private lateinit var btnHistory: Button
     private lateinit var alertsContainerHistory: LinearLayout
 
+    // VIDEO OVERLAY
+    private lateinit var videoOverlay: FrameLayout
+    private lateinit var videoView: VideoView
+    private lateinit var btnCloseVideo: ImageButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -28,15 +33,26 @@ class HistoryPageActivity : AppCompatActivity() {
         btnHistory = findViewById(R.id.btnHistory)
         alertsContainerHistory = findViewById(R.id.alertsContainerHistory)
 
+        videoOverlay = findViewById(R.id.videoOverlay)
+        videoView = findViewById(R.id.videoView)
+        btnCloseVideo = findViewById(R.id.btnCloseVideo)
+
+
+
         btnHome.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
 
         btnAlerts.setOnClickListener {
-            startActivity(Intent(this, AlertsPageActivity::class.java))
+            finish()
         }
 
         btnHistory.setOnClickListener { }
+
+        btnCloseVideo.setOnClickListener {
+            videoView.stopPlayback()
+            videoOverlay.visibility = View.GONE
+        }
 
         loadHistory()
     }
@@ -48,7 +64,7 @@ class HistoryPageActivity : AppCompatActivity() {
                     .from("history")
                     .select()
                     .decodeList<HistoryAlert>()
-                    .sortedByDescending { it.created_at }
+                    .sortedByDescending { it.created_at } // newest first
 
                 alertsContainerHistory.removeAllViews()
 
@@ -87,17 +103,26 @@ class HistoryPageActivity : AppCompatActivity() {
             val videoUrl = alert.video_url
 
             if (!videoUrl.isNullOrEmpty()) {
+
                 setOnClickListener {
-                    Log.d("VIDEO_URL", videoUrl)
 
-                    val intent = Intent(
-                        this@HistoryPageActivity,
-                        VideoPlayerActivity::class.java
-                    )
+                    videoOverlay.visibility = View.VISIBLE
 
-                    intent.putExtra("VIDEO_URL", videoUrl)
-                    startActivity(intent)
+                    videoView.stopPlayback()
+
+                    videoView.setZOrderOnTop(true)
+                    videoView.holder.setFormat(android.graphics.PixelFormat.TRANSLUCENT)
+
+                    videoView.post {
+                        videoView.setOnPreparedListener { mp ->
+                            mp.isLooping = false
+                            videoView.start()
+                        }
+                        videoView.setVideoURI(Uri.parse(videoUrl))
+                        videoView.requestFocus()
+                    }
                 }
+
             } else {
                 isEnabled = false
                 alpha = 0.5f

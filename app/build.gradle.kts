@@ -44,7 +44,6 @@ kotlin {
 
 dependencies {
 
-    // AndroidX
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
@@ -62,13 +61,14 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:postgrest-kt:3.3.0")
     implementation("io.github.jan-tennert.supabase:auth-kt:3.3.0")
 
+
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 
     implementation(libs.places)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
-    // Testing
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
