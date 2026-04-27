@@ -61,7 +61,6 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:supabase-kt:3.3.0")
     implementation("io.github.jan-tennert.supabase:postgrest-kt:3.3.0")
     implementation("io.github.jan-tennert.supabase:auth-kt:3.3.0")
-    implementation("io.github.jan-tennert.supabase:storage-kt:2.5.0")
 
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 

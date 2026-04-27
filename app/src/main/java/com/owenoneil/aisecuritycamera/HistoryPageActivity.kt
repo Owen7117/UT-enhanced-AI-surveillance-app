@@ -9,7 +9,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import io.github.jan.supabase.postgrest.from
-import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.launch
 
 class HistoryPageActivity : AppCompatActivity() {
@@ -49,6 +48,7 @@ class HistoryPageActivity : AppCompatActivity() {
                     .from("history")
                     .select()
                     .decodeList<HistoryAlert>()
+                    .sortedByDescending { it.created_at }
 
                 alertsContainerHistory.removeAllViews()
 
@@ -60,15 +60,21 @@ class HistoryPageActivity : AppCompatActivity() {
 
             } catch (e: Exception) {
                 Log.e("HISTORY", "Failed to load history", e)
+                addEmptyView()
             }
         }
     }
 
     private fun addHistoryRow(alert: HistoryAlert) {
-        val displayTime = alert.created_at.replace("T", " ")
+
+        val displayTime = alert.created_at
+            ?.replace("T", " ")
+            ?: "Unknown time"
+
+        val danger = alert.danger_level ?: "N/A"
 
         val rowButton = Button(this).apply {
-            text = "${alert.alert}: $displayTime"
+            text = "${alert.alert}\nTime: $displayTime\nDanger: $danger"
             isAllCaps = false
 
             layoutParams = LinearLayout.LayoutParams(
@@ -78,33 +84,23 @@ class HistoryPageActivity : AppCompatActivity() {
                 setMargins(0, 10, 0, 10)
             }
 
-            setOnClickListener {
-                val path = alert.video_path   // <-- IMPORTANT: store this in DB
+            val videoUrl = alert.video_url
 
-                if (!path.isNullOrEmpty()) {
-                    lifecycleScope.launch {
-                        try {
-                            val storage = SupabaseClientProvider.client.storage
+            if (!videoUrl.isNullOrEmpty()) {
+                setOnClickListener {
+                    Log.d("VIDEO_URL", videoUrl)
 
-                            // ✅ PUBLIC bucket
-                            val videoUrl = storage
-                                .from("videos")
-                                .publicUrl(path)
+                    val intent = Intent(
+                        this@HistoryPageActivity,
+                        VideoPlayerActivity::class.java
+                    )
 
-                            // 🔒 If PRIVATE bucket, use this instead:
-                            // val videoUrl = storage
-                            //     .from("your-bucket-name")
-                            //     .createSignedUrl(path, 300)
-
-                            val intent = Intent(this@HistoryPageActivity, VideoPlayerActivity::class.java)
-                            intent.putExtra("video_url", videoUrl)
-                            startActivity(intent)
-
-                        } catch (e: Exception) {
-                            Log.e("VIDEO", "Failed to load video", e)
-                        }
-                    }
+                    intent.putExtra("VIDEO_URL", videoUrl)
+                    startActivity(intent)
                 }
+            } else {
+                isEnabled = false
+                alpha = 0.5f
             }
         }
 

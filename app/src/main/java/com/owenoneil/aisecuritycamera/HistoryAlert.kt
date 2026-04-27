@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class HistoryAlert(
     val alert: String,
     val created_at: String,
-    val video_path: String?  = null
+    val video_url: String?,
+    val danger_level: String?
 )

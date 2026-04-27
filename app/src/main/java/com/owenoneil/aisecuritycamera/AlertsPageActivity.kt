@@ -39,7 +39,7 @@ class AlertsPageActivity : AppCompatActivity() {
         btnHistory.setOnClickListener {
             startActivity(Intent(this, HistoryPageActivity::class.java))
         }
-        btnAlerts.setOnClickListener { /* already here */ }
+        btnAlerts.setOnClickListener { }
 
         loadTodayAlerts()
     }
@@ -81,7 +81,7 @@ class AlertsPageActivity : AppCompatActivity() {
     private fun addAlertRow(alert: HistoryAlert) {
         val displayTime = alert.created_at.replace("T", " ")
         val rowButton = Button(this).apply {
-            text = "${alert.alert}: ${displayTime} "
+            text = "${alert.alert}\nTime: $displayTime\nDanger: ${alert.danger_level}"
             isAllCaps = false
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
