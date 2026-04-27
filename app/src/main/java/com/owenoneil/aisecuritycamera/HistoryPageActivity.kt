@@ -20,12 +20,11 @@ class HistoryPageActivity : AppCompatActivity() {
     private lateinit var btnHistory: Button
     private lateinit var alertsContainerHistory: LinearLayout
 
-    // VIDEO OVERLAY
+
     private lateinit var videoOverlay: FrameLayout
     private lateinit var btnCloseVideo: ImageButton
     private lateinit var playerView: androidx.media3.ui.PlayerView
     private lateinit var player: ExoPlayer
-    private var allowControllerShow = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +40,7 @@ class HistoryPageActivity : AppCompatActivity() {
         btnCloseVideo = findViewById(R.id.btnCloseVideo)
         playerView = findViewById(R.id.playerView)
 
-        // EXO PLAYER INIT
+
         player = ExoPlayer.Builder(this).build()
         playerView.player = player
         playerView.hideController()
@@ -142,8 +141,8 @@ class HistoryPageActivity : AppCompatActivity() {
                 }
 
             } else {
-                isEnabled = false
-                alpha = 0.5f
+                isEnabled = true
+                setTextColor(resources.getColor(android.R.color.black))
             }
         }
 

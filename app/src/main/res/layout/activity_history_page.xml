@@ -147,13 +147,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Centering container -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:foregroundGravity="center">
 
-            <!-- Video (centered, not full height) -->
+
             <androidx.media3.ui.PlayerView
                 android:id="@+id/playerView"
                 android:layout_width="320dp"
@@ -163,7 +162,6 @@
                 app:use_controller="false" />
         </FrameLayout>
 
-        <!-- Close button -->
         <ImageButton
             android:id="@+id/btnCloseVideo"
             android:layout_width="48dp"

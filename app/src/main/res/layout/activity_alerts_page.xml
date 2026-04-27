@@ -130,6 +130,47 @@
     </LinearLayout>
 
 
+    <FrameLayout
+        android:id="@+id/videoOverlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#CC000000"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="120dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foregroundGravity="center">
+
+            <androidx.media3.ui.PlayerView
+                android:id="@+id/playerView"
+                android:layout_width="320dp"
+                android:layout_height="520dp"
+                android:layout_gravity="center"
+                android:background="#000000"
+                app:use_controller="false" />
+        </FrameLayout>
+
+        <ImageButton
+            android:id="@+id/btnCloseVideo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="30dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:tint="#FFFFFF"
+            android:contentDescription="Close"/>
+    </FrameLayout>
+
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/tempHistoryScroll"
         android:layout_width="0dp"
