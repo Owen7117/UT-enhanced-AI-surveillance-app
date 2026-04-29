@@ -8,15 +8,13 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
 class DevicesPageActivity : AppCompatActivity() {
 
@@ -32,20 +30,15 @@ class DevicesPageActivity : AppCompatActivity() {
     private lateinit var btnDevices: Button
     private lateinit var btnAlerts: Button
     private lateinit var btnHistory: Button
-    private lateinit var profileDropdown: View
-    private lateinit var btnlogin: Button
-    private lateinit var btnlogout: Button
-    private lateinit var menuProfile: Button
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_devices_page)
 
 
         btnHamburger = findViewById(R.id.btnHamburger)
-        customMenu = findViewById(R.id.customMenu)
         btnAddDevice = findViewById(R.id.btnAddDevice)
         AddDeviceMenu = findViewById(R.id.AddDeviceMenu)
         etDeviceName = findViewById(R.id.etDeviceName)
@@ -56,11 +49,6 @@ class DevicesPageActivity : AppCompatActivity() {
         btnDevices = findViewById(R.id.btnDevices)
         btnAlerts = findViewById(R.id.btnAlerts)
         btnHistory = findViewById(R.id.btnHistory)
-        profileDropdown = findViewById(R.id.profileDropdown)
-        btnlogin = findViewById(R.id.btnlogin)
-        btnlogout = findViewById(R.id.btnlogout)
-        menuProfile = findViewById(R.id.menuProfile)
-
 
         btnHamburger.setOnClickListener {
             if (customMenu.visibility == View.GONE) {
@@ -76,12 +64,17 @@ class DevicesPageActivity : AppCompatActivity() {
                 AddDeviceMenu.visibility = View.GONE
             }
         }
-        menuProfile.setOnClickListener {
-            if (profileDropdown.visibility == View.GONE) {
-                profileDropdown.visibility = View.VISIBLE
-            } else {
-                profileDropdown.visibility = View.GONE
-            }
+        val bottomNav = findViewById<View>(R.id.bottomNav)
+
+        ViewCompat.setOnApplyWindowInsetsListener(bottomNav) { view, insets ->
+            val bottomInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+            view.setPadding(
+                view.paddingLeft,
+                view.paddingTop,
+                view.paddingRight,
+                bottomInset
+            )
+            insets
         }
 
         btnDone.setOnClickListener {
@@ -100,10 +93,6 @@ class DevicesPageActivity : AppCompatActivity() {
             }
         }
 
-        // Navigation buttons
-        btnlogin.setOnClickListener {
-            startActivity(Intent(this, LoginPageActivity::class.java))
-        }
         btnHome.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
