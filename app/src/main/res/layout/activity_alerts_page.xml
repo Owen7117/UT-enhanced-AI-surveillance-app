@@ -11,6 +11,19 @@
     android:background="#F9F9F9">
 
 
+    <Button
+        android:id="@+id/btnRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Refresh"
+        android:textSize="14sp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="#673AB7"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toTopOf="@id/tvTodaysActivity"
+        app:layout_constraintBottom_toBottomOf="@id/tvTodaysActivity"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <TextView
         android:id="@+id/tvAlertsPage"
         android:layout_width="0dp"

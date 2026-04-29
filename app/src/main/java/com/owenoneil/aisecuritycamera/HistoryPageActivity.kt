@@ -19,7 +19,6 @@ class HistoryPageActivity : AppCompatActivity() {
     private lateinit var btnHistory: Button
     private lateinit var alertsContainerHistory: LinearLayout
 
-
     private lateinit var videoOverlay: FrameLayout
     private lateinit var btnCloseVideo: ImageButton
     private lateinit var playerView: androidx.media3.ui.PlayerView
@@ -28,6 +27,7 @@ class HistoryPageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history_page)
+
 
         btnHome = findViewById(R.id.btnHome)
         btnAlerts = findViewById(R.id.btnAlerts)

@@ -25,6 +25,8 @@ class AlertsPageActivity : AppCompatActivity() {
     private lateinit var playerView: androidx.media3.ui.PlayerView
     private lateinit var player: ExoPlayer
 
+    private lateinit var btnRefresh: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_alerts_page)
@@ -34,6 +36,13 @@ class AlertsPageActivity : AppCompatActivity() {
         btnAlerts = findViewById(R.id.btnAlerts)
         btnHistory = findViewById(R.id.btnHistory)
         alertsContainer = findViewById(R.id.alertsContainerTempHistory)
+
+        btnRefresh = findViewById(R.id.btnRefresh)
+
+        btnRefresh.setOnClickListener {
+            Toast.makeText(this, "Refreshing...", Toast.LENGTH_SHORT).show()
+            loadTodayAlerts()
+        }
 
         btnHome.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
